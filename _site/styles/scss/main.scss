@@ -1,12 +1,8 @@
-.red{
-  color: #AD5603;
+@import 'variables';
+
+h1,h2,h3,h4,h5,h6{
+  font-family:  $font1;
 }
-.border-green{
-  border: thin solid #12DA98;
-}
-h1{
-  font-family:  serif;
-}
-h4{
-  font-family: sans-serif;
+a,p,span{
+  font-family: $font2;
 }

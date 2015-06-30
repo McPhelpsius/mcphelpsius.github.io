@@ -1,7 +1,7 @@
 {
 "version": 3,
-"mappings": "AAAA,IAAI,CACF,KAAK,CAAE,OAAO,CAEhB,aAAa,CACX,MAAM,CAAE,kBAAkB,CAE5B,EAAE,CACA,WAAW,CAAG,KAAK,CAErB,EAAE,CACA,WAAW,CAAE,UAAU",
-"sources": ["scss/main.scss"],
+"mappings": "AAEA,iBAAiB,CACf,WAAW,CCHL,iCAAgB,CDKxB,QAAQ,CACN,WAAW,CCLL,8BAAS",
+"sources": ["scss/main.scss","scss/_variables.scss"],
 "names": [],
 "file": "main.css"
 }
