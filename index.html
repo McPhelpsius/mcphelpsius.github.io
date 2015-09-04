@@ -1,19 +1,14 @@
 ---
 layout: default
+title: Nathan's Front Page
+heading: Nathan's Blog
 ---
 
-<div class="pure-u-sm-1 pure-u-md-1-4">
-  <header>
-    <h1>Nathan's Blog</h1>
-  </header>
-</div>
-<div class="pure-u-sm-1 pure-u-md-3-4">
   {% for post in site.posts %}
-  <section class="entry pure-u-1">
+  <article class="entry pure-u-1">
     <a href="{{ site.baseurl}}{{ post.url }}">
       <h3>{{ post.title }}</h3>
     </a>
     <div>{{ post.excerpt }}</div>
-  </section>
+  </article>
   {% endfor %}
-</div>

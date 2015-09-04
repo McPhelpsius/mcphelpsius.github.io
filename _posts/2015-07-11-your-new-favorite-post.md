@@ -1,6 +1,6 @@
 ---
 title: Your New Favorite Post
-template: default
+template: post
 ---
 
 THIS is your new favorite post
