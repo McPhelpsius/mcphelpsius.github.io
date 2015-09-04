@@ -20,6 +20,9 @@ header{
 h1,h2,h3,h4,h5,h6{
   font-family:  $font1;
 }
+img{
+  max-width: 100%;
+}
 a,p,span{
   font-family: $font2;
 }
