@@ -1,3 +1,4 @@
+@import 'font-faces';
 @import 'variables';
 body{
   margin: 0;
@@ -18,13 +19,21 @@ header{
   height: calc(100vh - 5em);
 }
 h1,h2,h3,h4,h5,h6{
-  font-family:  $font1;
+  font-family:  $roboto;
 }
 img{
   max-width: 100%;
 }
 a,p,span{
-  font-family: $font2;
+  font-family: $roboto-light;
+}
+a {
+  color: #27ae60;
+  text-decoration: none;
+  transition: color .5s linear;
+  &:hover{
+    color: #2ecc71;
+  }
 }
 .inverse{
   color: #FFF;
