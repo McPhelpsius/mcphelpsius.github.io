@@ -28,9 +28,15 @@ a,p,span{
   font-family: $roboto-light;
 }
 a {
-  color: #27ae60;
+  color: #2980b9;
   text-decoration: none;
-  transition: color .5s linear;
+  transition: color .2s linear;
+  &:hover{
+    color: #3498db;
+  }
+}
+footer a {
+  color: #27ae60;
   &:hover{
     color: #2ecc71;
   }
