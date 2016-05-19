@@ -5,7 +5,7 @@ layout: post
 
 # Back in the day...
 
-![stripe](images/stripelogo.png)
+![stripe](./images/stripelogo.png)
 
 I worked in one of those basement shops (startups?), and I got to do a lot of WordPress Development. 
 I still ended up being mostly the styles and markup guy.
