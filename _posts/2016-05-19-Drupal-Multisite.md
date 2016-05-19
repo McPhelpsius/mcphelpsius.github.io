@@ -33,4 +33,4 @@ so that desktop users wouldn't be forced to click on a hamburger icon to get to 
 the amount of [masonry](http://masonry.desandro.com/) used on the site (it was everywhere!).
 
 It was a lot of fun, honestly. I was unleashed to use [flexbox](https://css-tricks.com/snippets/css/a-guide-to-flexbox/) after petitioning enough.
-I got to explore the endless world of Drupal modules, get (Drupalized)[https://drupalize.me/], and experience [Drupal Corn](http://2016.drupalcorn.org/). 
+I got to explore the endless world of Drupal modules, get [Drupalized](https://drupalize.me/), and experience [Drupal Corn](http://2016.drupalcorn.org/). 
