@@ -1,2 +1,6 @@
 highlighter: pygments
 name: Nathan Phelps
+
+scss:
+  sass_dir: scss
+  style: compressed
