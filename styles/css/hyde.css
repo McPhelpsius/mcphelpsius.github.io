@@ -72,10 +72,14 @@ html {
 
 /* Sidebar links */
 .sidebar a {
-  color: dodgerblue;
+  color: #FFF
 }
 
-.sidebar a:hover {
+.sidebar .sidebar-nav a {
+  color:#7075C8;
+}
+
+.sidebar .sidebar-nav a:hover {
   color: #6367AA;
 }
 
