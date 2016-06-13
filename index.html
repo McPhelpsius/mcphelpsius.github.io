@@ -1,20 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <title>McPhelpsius's Home Page</title>
-    <link href="http://fonts.googleapis.com/css?family=Poppins:400,600" rel="stylesheet" type="text/css">
-    <link href="http://fonts.googleapis.com/css?family=VT323" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" type="text/css" href="styles/main.css">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-  </head>
-  <body>
-    <header></header>
-    <div class="content">
-      <div class="frontleftcolumn">
-        <h4>Hello, again</h4>
-      </div>
-      <div class="frontrightimage"></div>
-    </div>
-    <footer><span>&copy;2015 McPhelpsius and Such Stuff</span></footer>
-  </body>
-</html>
+---
+layout: default
+title: Home
+---
+
+<div class="posts">
+  {% for post in paginator.posts %}
+  <div class="post">
+    <h1 class="post-title">
+      <a href="{{ post.url }}">
+        {{ post.title }}
+      </a>
+    </h1>
+
+    <span class="post-date">{{ post.date | date_to_string }}</span>
+
+    {{ post.content }}
+  </div>
+  {% endfor %}
+</div>
+
+<div class="pagination">
+  {% if paginator.next_page %}
+    <a class="pagination-item older" href="{{ site.baseurl }}page{{paginator.next_page}}">Older</a>
+  {% else %}
+    <span class="pagination-item older">Older</span>
+  {% endif %}
+  {% if paginator.previous_page %}
+    {% if paginator.page == 2 %}
+      <a class="pagination-item newer" href="{{ site.baseurl }}">Newer</a>
+    {% else %}
+      <a class="pagination-item newer" href="{{ site.baseurl }}page{{paginator.previous_page}}">Newer</a>
+    {% endif %}
+  {% else %}
+    <span class="pagination-item newer">Newer</span>
+  {% endif %}
+</div>
