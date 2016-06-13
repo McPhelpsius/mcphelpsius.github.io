@@ -3,11 +3,11 @@ title: AceInfo Code Dump
 layout: post
 ---
 
-## Scroll down for lots of radar code
-
 I took a job with AceInfo, a government contractor who develops with the NOAA. This is the most interesting work I've done to date,
 probably because I got in a little above my skill level. It was a lot of fun though. Below is a bunch of code I did on a project using
 OpenLayers 3 and ESRI Maps. Enjoy!
+
+## Scroll down for lots of radar code
 
 ***I've excluded content I didn't create or work on, so the context might seem a bit skewed.***
 
