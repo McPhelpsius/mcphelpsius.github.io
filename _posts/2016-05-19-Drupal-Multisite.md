@@ -2,9 +2,10 @@
 title: Vance Publishing Drupal Multisite
 layout: post
 ---
-# The year was 2015...
 
 I began work at a publishing corporation. A *paper* publishing corporation. They still print and sell *paper* magazines on ***paper**.
+
+## The year was 2015...
 
 I give them a hard time. but it's still for real. The company owner didn't value technology, and that was reflected in the way they made their website decisions.
 So they outsourced their sites to the lowest bidder in Chicago got what they paid for: a very expensive Drupal Multi-Multi Site. 
