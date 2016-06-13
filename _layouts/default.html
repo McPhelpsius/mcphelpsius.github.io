@@ -1,24 +1,15 @@
 <!DOCTYPE html>
-<html lang="en" class="yui3-js-enabled">
-  <head>
-    <title>{{ site.name }}{% if page.title %} - {{ page.title }}{% endif%}</title>
-    <link rel="stylesheet" type="text/css" href="styles/pure-base.css">
-    <link rel="stylesheet" type="text/css" href="styles/pure.css">
-    <link rel="stylesheet" type="text/css" href="/styles/main.css">
-    <script type="text/javascript" src="/js/behaviors.js">
+<html lang="en-us">
 
-    </script>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta charset="utf-8">
+  {% include head.html %}
 
-  </head>
-  <body id="theBody">
-    <div id="body-div" class="flex">
-      <div id="main-height" class="flex">
-        {% include title.html %}
-        <section id="the-content">{{ content }}</section>
-      </div>
-      {% include footer.html %}
+  <body>
+
+    {% include sidebar.html %}
+
+    <div class="content container">
+      {{ content }}
     </div>
+
   </body>
 </html>
