@@ -1,7 +1,0 @@
-{
-"version": 3,
-"mappings": "AAEA,iBAAiB,CACf,WAAW,CCHL,iCAAgB,CDKxB,QAAQ,CACN,WAAW,CCLL,8BAAS",
-"sources": ["scss/main.scss","scss/_variables.scss"],
-"names": [],
-"file": "main.css"
-}
