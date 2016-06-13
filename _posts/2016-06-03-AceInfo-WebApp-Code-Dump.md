@@ -3,15 +3,20 @@ title: AceInfo Code Dump
 layout: post
 ---
 
-# AceInfo Code Dump
+## Scroll down for lots of radar code
 
-I took a job with AceInfo, a contractor who I doing weather forecasting work. This is the most interesting work I've done to date,
+I took a job with AceInfo, a government contractor who develops with the NOAA. This is the most interesting work I've done to date,
 probably because I got in a little above my skill level. It was a lot of fun though. Below is a bunch of code I did on a project using
 OpenLayers 3 and ESRI Maps. Enjoy!
 
-#### I've excluded content I didn't create or at least work on, so the context is a bit skewed.
+***I've excluded content I didn't create or work on, so the context might seem a bit skewed.***
 
-## Map Object
+[Here's a bare bones version for the first, simple solution that we had to incorporate in to a more complex project.](http://www.codepen.io/mcphelpsius)
+We had to fix the looping radar layer on the project, because it was flashing on every iteration. A call was being made 
+for the data on every iteration, so instead we loaded all the layers at once. From there, we incorporated it into a very
+complex, flexible project, which required a whole ne architecture, as seen below.
+
+#### Map Object
 
     /* This is the overarching Map object that contains OpenLayers Extents, an OpenLayers Map, 
     OpenLayers layers/layerGroups,and our custom layerHandler. This allows them all to be accessible to ecah other with multiple maps
@@ -114,7 +119,7 @@ OpenLayers 3 and ESRI Maps. Enjoy!
     
     
     
-## Layer Handler
+#### Layer Handler
     
     /* In this page we created the Map's Handler to handle the layers on the map that would be switched active and hidden. 
     Here we would create all the layers for the map, and create a reference to them. This would allow us to toggle which layers would be 
@@ -227,7 +232,7 @@ OpenLayers 3 and ESRI Maps. Enjoy!
     };
     
     
-## Layers
+#### Layers
     
     define(function (require) {
         'use strict';
@@ -415,7 +420,7 @@ OpenLayers 3 and ESRI Maps. Enjoy!
     });
 
 
-## Sources
+#### Sources
 
     // This is a custom child of OpenLayers Sources, allowing use to add more properties and behaviors to our XYZ sources.
 
