@@ -6,8 +6,8 @@ highlighter:      pygments
 permalink:        pretty
 
 # Setup
-title:            Nathan Phelps - The Portfolio
-tagline:          "I'm more than just a beautiful set of handlebars"
+title:            Nathan Phelps
+tagline:          "The Portfolio"
 description:      "Wonderful code samples from a wonderful man"
 url:              http://mcphelpsius.github.io
 baseurl:          /
