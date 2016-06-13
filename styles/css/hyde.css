@@ -72,7 +72,11 @@ html {
 
 /* Sidebar links */
 .sidebar a {
-  color: #fff;
+  color: dodgerblue;
+}
+
+.sidebar a:hover {
+  color: #6367AA;
 }
 
 /* About section */
