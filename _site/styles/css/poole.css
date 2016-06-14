@@ -287,8 +287,8 @@ tbody tr:nth-child(odd) th {
 
 .container {
   max-width: 38rem;
-  padding-left:  1rem;
-  padding-right: 1rem;
+  /*padding-left:  1rem;
+  padding-right: 1rem;*/
   margin-left:  auto;
   margin-right: auto;
 }
@@ -330,14 +330,21 @@ tbody tr:nth-child(odd) th {
 
 .page,
 .post {
-  margin-bottom: 4em;
+  margin-bottom: 2em;
+  padding: 1rem;
+  transition: all .6s;
 }
 
 /* Blog post or page title */
 .page-title,
 .post-title,
-.post-title a {
+.post-title a,
+a.post-link {
   color: #303030;
+}
+
+a.post-link:hover .post{
+  background: rgba(0, 211, 254, .5);
 }
 .page-title,
 .post-title {

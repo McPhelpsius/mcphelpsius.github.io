@@ -45,6 +45,18 @@ html {
   }
 }
 
+a {
+  cursor: pointer;
+  text-decoration: none !important;
+  transition: all .3s;
+}
+
+.flex {
+  display: flex;
+  display: box;
+  display: flexbox;
+}
+
 
 /*
  * Sidebar
@@ -72,14 +84,44 @@ html {
 
 /* Sidebar links */
 .sidebar a {
-  color: #fff;
+  color: #FFF;
 }
+
+.sidebar .sidebar-nav {
+  margin-top: 1rem;
+}
+
+.sidebar .sidebar-nav a {
+  color:#00A3AE;
+  text-align: center;
+}
+
+.sidebar .sidebar-nav a:hover {
+  color: #00D3FE;
+}
+
+.sidebar .sidebar-nav .social-imagelinks {
+  justify-content: center;
+  margin-top: .3rem;
+}
+
+.sidebar .sidebar-nav .social-imagelinks a {
+  flex: 0 0 3rem;
+  padding: .2rem;
+}
+
+
+.sidebar .sidebar-nav .social-imagelinks a img {
+  margin: 0;
+}
+
 
 /* About section */
 .sidebar-about h1 {
   color: #fff;
   margin-top: 0;
   font-family: 'Kreon', serif;
+  font-weight: 600;
   font-size: 3.25rem;
 }
 
