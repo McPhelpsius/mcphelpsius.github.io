@@ -3,12 +3,13 @@ title: Filtering Magazines Issues with AJAX
 layout: post
 ---
 
-While working at Vance Publishing, I ran into a few challenges that made work more itneresting to me. I usually got "stuck" doing styles.
-I only say "stuck" because I know it's part of my job, but I don't like it being the only thing I do, mostly because of
-Browser-Compatibility **and** Mobile-First combined into one task. So I appreciated days like the following:
+While working at Vance Publishing, I ran into a few challenges that made work more interesting to me.
+There was a good patch of maybe 2-3 months where it felt like I was doing the same thing *everyday* (which I was), and it was getting old.
+So I appreciated the chance to take on the following task:
 
 > ## THREAT: Magazine Issue Filtering!
-> The fashion-forward family can't find fastly.
+> The fashion-forward fanatics can't find fastly. (The salon magazine 
+> clients wanted to be able to get to their magazine issues more quickly)
 
 > ## TASK: Simplify the process 
 > * Create a filtering interface to fetch magazines from one location at the top of the archive.
@@ -22,7 +23,7 @@ It allowed us to turn a Drupal "View" into an API.
 
 We used this to make a call to that service and return HTML data to populate the next two drop downs, the third (the issue)
 depending on the selection in the second dropdown. After all three (and *only* after all three) are selected, 
-then pressing 'Go' will navaigate directly to the magazine article you chose. 
+then pressing 'Go' will navigate directly to the magazine article you chose. 
 
 
 ```

@@ -332,7 +332,6 @@ tbody tr:nth-child(odd) th {
 .post {
   margin-bottom: 2em;
   padding: 1rem;
-  transition: all .6s;
 }
 
 /* Blog post or page title */
@@ -341,11 +340,14 @@ tbody tr:nth-child(odd) th {
 .post-title a,
 a.post-link {
   color: #303030;
+  transition: color .3s;
 }
 
-a.post-link:hover .post{
-  background: rgba(0, 211, 254, .5);
+a.post-link:hover .post-title{
+  color: #00A3AE;
 }
+
+
 .page-title,
 .post-title {
   margin-top: 0;

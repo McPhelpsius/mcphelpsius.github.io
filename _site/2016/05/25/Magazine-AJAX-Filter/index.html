@@ -62,14 +62,15 @@
       <div class="post">
   <h1 class="post-title">Filtering Magazines Issues with AJAX</h1>
   <span class="post-date">25 May 2016</span>
-  <p>While working at Vance Publishing, I ran into a few challenges that made work more itneresting to me. I usually got &quot;stuck&quot; doing styles.
-I only say &quot;stuck&quot; because I know it&#39;s part of my job, but I don&#39;t like it being the only thing I do, mostly because of
-Browser-Compatibility <strong>and</strong> Mobile-First combined into one task. So I appreciated days like the following:</p>
+  <p>While working at Vance Publishing, I ran into a few challenges that made work more interesting to me.
+There was a good patch of maybe 2-3 months where it felt like I was doing the same thing <em>everyday</em> (which I was), and it was getting old.
+So I appreciated the chance to take on the following task:</p>
 
 <blockquote>
 <h2>THREAT: Magazine Issue Filtering!</h2>
 
-<p>The fashion-forward family can&#39;t find fastly.</p>
+<p>The fashion-forward fanatics can&#39;t find fastly. (The salon magazine 
+clients wanted to be able to get to their magazine issues more quickly)</p>
 
 <h2>TASK: Simplify the process</h2>
 
@@ -87,7 +88,7 @@ It allowed us to turn a Drupal &quot;View&quot; into an API.</p>
 
 <p>We used this to make a call to that service and return HTML data to populate the next two drop downs, the third (the issue)
 depending on the selection in the second dropdown. After all three (and <em>only</em> after all three) are selected, 
-then pressing &#39;Go&#39; will navaigate directly to the magazine article you chose. </p>
+then pressing &#39;Go&#39; will navigate directly to the magazine article you chose. </p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">  function getDropDownData (value){
     $(&#39;option.delete-me&#39;).remove();
     selectYear.prop(&#39;disabled&#39;, &#39;disabled&#39;);
