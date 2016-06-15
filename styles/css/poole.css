@@ -334,15 +334,6 @@ tbody tr:nth-child(odd) th {
   padding: 1rem;
 }
 
-.posts .post {
-  box-shadow: 0px 0px 6px 1px #DDD;
-  transition: box-shadow .3s
-}
-
-.posts .post:hover {
-  box-shadow: 0px 0px 10px 3px #CCC;
-}
-
 /* Blog post or page title */
 .page-title,
 .post-title,
