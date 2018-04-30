@@ -1,2 +1,25 @@
-highlighter: pygments
+# Dependencies
+markdown:         redcarpet
+highlighter:      pygments
 
+# Permalinks
+permalink:        pretty
+
+# Setup
+title:            Nathan Phelps
+tagline:          "The Portfolio"
+description:      "Wonderful code samples from a wonderful man"
+url:              http://mcphelpsius.github.io
+baseurl:          /
+
+author:
+  name:           'Nathan Phelps'
+  url:            https://twitter.com/mcphelpsius
+
+paginate:         5
+
+# Custom vars
+version:          2.1.0
+
+github:
+  repo:           https://github.com/mcphelpsius
