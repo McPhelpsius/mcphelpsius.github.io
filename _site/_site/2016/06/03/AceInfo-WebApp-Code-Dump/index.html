@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      AceInfo Code Dump &middot; Nathan Phelps
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/styles/css/poole.css">
+  <link rel="stylesheet" href="/styles/css/syntax.css">
+  <link rel="stylesheet" href="/styles/css/hyde.css">
+  <link href='https://fonts.googleapis.com/css?family=Kreon:400,300' rel='stylesheet' type='text/css'>
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+                                 <link rel="shortcut icon" href="/images/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+</head>
+
+
+  <body>
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <h1>
+        <a href="/">
+          Nathan Phelps
+        </a>
+      </h1>
+      <p class="lead">Wonderful code samples from a wonderful man</p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="sidebar-nav-item" href="/WundergroundApp">Predict the Weather</a>
+      <a class="sidebar-nav-item" href="/KitschyCache">The Way to a Woman's Heart</a>
+      <div class="flex social-imagelinks">
+        <a href="http://codepen.io/McPhelpsius/"><img src="/images/thecodepenideserve.png" alt="Codepen"></a>
+        <a href="http://github.com/McPhelpsius/"><img src="/images/githubwhite.png" alt="Github"></a>
+      </div>    
+
+    </nav>
+
+    <p>&copy; 2016. All rights reserved.</p>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="post">
+  <h1 class="post-title">AceInfo Code Dump</h1>
+  <span class="post-date">03 Jun 2016</span>
+  <p>I took a job with AceInfo, a government contractor who develops with the NOAA. This is the most interesting work I&#39;ve done to date,
+probably because I got in a little above my skill level. It was a lot of fun though. Below is a bunch of code I did on a project using
+OpenLayers 3 and ESRI Maps. Enjoy!</p>
+
+<h2>Scroll down for lots of radar code</h2>
+
+<p><strong><em>I&#39;ve excluded content I didn&#39;t create or work on, so the context might seem a bit skewed.</em></strong></p>
+
+<p><a href="http://www.codepen.io/mcphelpsius">Here&#39;s a bare bones version for the first, simple solution that we had to incorporate in to a more complex project.</a>
+We had to fix the looping radar layer on the project, because it was flashing on every iteration. A call was being made 
+for the data on every iteration, so instead we loaded all the layers at once. From there, we incorporated it into a very
+complex, flexible project, which required a whole ne architecture, as seen below.</p>
+
+<h4>Map Object</h4>
+<div class="highlight"><pre><code class="language-text" data-lang="text">/* This is the overarching Map object that contains OpenLayers Extents, an OpenLayers Map, 
+OpenLayers layers/layerGroups,and our custom layerHandler. This allows them all to be accessible to ecah other with multiple maps
+in the app that should cross over each other. */
+
+var Map = function (options) {
+    this.mapDeferred = $.Deferred();
+    this.options = {
+        target: Math.random(),
+        controls: {
+            attribution: true,
+            zoom: true
+        },
+        playback: true,
+        layers: [&#39;background&#39;]
+    };
+    $.extend(true, this.options, options);
+    this.map = new ol.Map({
+        view: new ol.View({
+            projection: &#39;EPSG:3857&#39;,
+            minZoom: 3,
+            zoom:6
+        }),
+        controls: ol.control.defaults(this.options.controls)
+    });
+    this.extent = new ExtentPrototype(this.map);
+    this.handler = new Handler({
+        playback: this.options.playback
+    });
+    this.map.addLayer(this.handler.layer);
+    this.addLayers();
+    this.attachEvents();
+};
+
+Map.prototype.constructor = Map;
+
+Map.prototype.appendMapData = function(data, extent) {
+    return $.extend(true, {}, data, {
+        map: {
+            target: this.options.target || null,
+            ready: this.map.getTargetElement() ? true : false,
+            size: this.map.getSize() || null,
+            extent: extent || this.extent.getExtent() || null
+        }
+    });
+};
+
+Map.prototype.addLayers = function() {
+    for (var x = 0; x &lt; this.options.layers.length; x++) {
+        this.updateMap(&#39;map:update&#39;, {layer: this.options.layers[x]});
+    }
+};
+
+Map.prototype.updateMap = function(evt, data) {
+    if (data.constructor !== Array) {
+        data = [data];
+    }
+    var that = this;
+    $.when(this.extent.getDeferred()).done(function(extent) {
+        $(window).trigger(&#39;ui:loopControls:detach&#39;);
+        for(var x = 0; x &lt; data.length; x++){
+            console.log(&quot;Updating &quot; + that.options.target + &quot; for &quot; + data[x].layer);
+            data[x] = that.appendMapData(data[x], extent);
+        }
+
+        that.handler.updateMap(data);
+    });
+};
+
+Map.prototype.attachEvents = function () {
+    var that = this;
+
+// &quot;once&quot; the map is rendered, add listeners (moveend fires when center is set on map load)
+    this.map.once(&quot;moveend&quot;, function(){
+
+        that.map.on(&#39;moveend&#39;, function() {
+            log.info(&quot;Updating &quot; + that.options.target + &quot; layer: pan&quot;);
+            that.handler.updateActiveLayers(that.appendMapData());
+        });
+        // Zoom in or out
+        that.map.getView().on(&#39;change:resolution&#39;, function() {
+            log.info(&quot;Updating &quot; + that.options.target + &quot; layer: zoom&quot;);
+            that.handler.updateActiveLayers(that.appendMapData());
+        });
+        // Store values in Local Storage
+        that.map.getView().on(&#39;propertychange&#39;, function(view) {
+            switch (view.key) {
+                case &#39;resolution&#39;:
+                    store.set(that.options.target + &quot;mapZoom&quot;, this.getZoom() );
+                    break;
+                case &#39;center&#39;:
+                    var centerLonLat = ol.proj.toLonLat(that.map.getView().getCenter(), &#39;EPSG:900913&#39;);
+                    store.set(that.options.target + &quot;mapCenter&quot;, centerLonLat );
+                    break;
+            }
+        });
+
+    });
+};
+</code></pre></div>
+<h4>Layer Handler</h4>
+<div class="highlight"><pre><code class="language-text" data-lang="text">/* In this page we created the Map&#39;s Handler to handle the layers on the map that would be switched active and hidden. 
+Here we would create all the layers for the map, and create a reference to them. This would allow us to toggle which layers would be 
+showing on the map, based on layer data. We made it able to show multiple layers.
+
+//// As you can tell, the naming conventions are pretty on point.
+// &quot;refName&quot;&quot; is a reference to the specific layerHandler and layer in it that we are creating. We have multiple maps in th app,
+// so this in necessary.
+// &quot;classPath&quot; is the path to the specific file where the object for the layer is in the file structure. Obviously 
+// this is for instantiating the instance of the layer.
+// &quot;data&quot; holds the information for the string and other data passed down from the route and Map
+
+Handler.prototype.createLayer = function(refName, classPath, data) {
+    var that = this;
+    console.log(data.map.target + &quot;:&quot;, &quot;Creating layer instance for &quot; + refName + &quot; @&quot; + classPath)
+
+    require([classPath], function(Layer){
+        var layer = new Layer(data);
+        layer.layersCreated.done(function() {
+            that.group.getLayers().setAt(that.layerRef[refName].position, layer.layer);
+            that.layerRef[refName].instance = layer;
+            that.layerRef[refName].ready.resolve(refName);
+        });
+    });
+    return that.layerRef[refName].ready.promise();
+};
+
+// createLayers was creating the layers for the map, and showLayers should be self explanatory
+// This is from a button click event where we want to toggle of one layer and show another one.
+// We hide all layers that are visible unless they have a &quot;persistent&quot; property that keeps it from ever being hidden, such
+// as the background layer
+
+Handler.prototype.showLayers = function (layers) {
+    layers = layers || {};
+    for (var name in this.layerRef) {
+        var that = this;
+        this.layerRef[name].ready.done(function(refName){
+            if (that.layerRef[refName].instance.get(&#39;persistent&#39;) === false){
+                if (typeof layers[refName] !== &#39;undefined&#39;) {
+                    if(typeof that.activeLayers[refName] === &#39;undefined&#39;){
+                        that.activeLayers[refName] = layers[refName];
+                        that.layerRef[refName].instance.showLayer(true);
+                        that.attachController(refName);
+                    }
+                    that.updateLayer(refName, layers[refName]);
+                } else {
+                    that.layerRef[refName].instance.showLayer(false);
+                    delete that.activeLayers[refName];
+                }
+            }
+        });
+    }
+};
+
+// There is a single controls element on the page that allows for loop, moving forwaard one, and moving backwards one
+// The weather radar data has looping weather with time, so this allows for people to play and stop that loop on demand.
+// This function allows each layer to attach to these button clicks when they are shown, and unassign hidden layers.
+Handler.prototype.attachController = function (refName) {
+    var layer = this.layerRef[refName].instance;
+    if (typeof this.layerRef[refName].instance !== &#39;undefined&#39;
+        &amp;&amp; layer.hasOwnProperty(&#39;loopControls&#39;)
+        &amp;&amp; layer.loopControls === true
+        &amp;&amp; this.options.playback) {
+
+        $(window).trigger(&#39;ui:loopControls:attach&#39;, {
+            refName: refName,
+            play: function(){
+                layer.loop(true);
+            },
+            stop: function(){
+                layer.loop(false);
+            },
+            forward: function(step){
+                layer.loop(false);
+                layer.cycleLayer(-1); // eventually pass step when UI allows
+            },
+            back: function(step){
+                layer.loop(false);
+                layer.cycleLayer(1); // eventually pass step when UI allows
+            }
+        });
+    }
+};
+
+// called with name and data
+// called with no prarams, use active
+Handler.prototype.showLayer = function (refname, data) {
+    var layers = {};
+    layers[refname] = data;
+    this.showLayers(layers);
+};
+
+Handler.prototype.updateActiveLayers = function(data){
+    for (var name in this.activeLayers) {
+        $.extend(true, this.activeLayers[name], data);
+        this.updateLayer(name, this.activeLayers[name]);
+    }
+
+};
+
+Handler.prototype.updateLayer = function (refName, data) {
+    if(typeof refName !== &#39;undefined&#39; &amp;&amp; typeof this.layerRef[refName] !== &#39;undefined&#39; &amp;&amp; typeof this.layerRef[refName].ready !== &#39;undefined&#39;) {
+        var that = this;
+        this.layerRef[refName].ready.done(function() {
+           that.layerRef[refName].instance.updateLayer(data);
+        });
+    } else {
+        log.warn(&quot;Cannot update layer &quot; + refName);
+    }
+};
+</code></pre></div>
+<h4>Layers</h4>
+<div class="highlight"><pre><code class="language-text" data-lang="text">define(function (require) {
+    &#39;use strict&#39;;
+
+    var $ = require(&#39;jquery&#39;);
+    var log = require(&#39;logger&#39;);
+    var ol = require(&#39;ol&#39;);
+
+    var LayerPrototype = function() {
+        this.data = this.pickle(&#39;data&#39;, {});
+        this.persistent = this.pickle(&#39;persistent&#39;, false);
+        this.layerOpacity = this.pickle(&#39;layerOpacity&#39;, 1);
+        this.loopControls = this.pickle(&#39;loopControls&#39;, false);
+
+        this.layersCreated = $.Deferred();
+        this.currentLayer = 0;
+        this.group = new ol.layer.Group({
+            layers: []
+        });
+        this.layer = this.group;
+
+        this.createLayers();
+    };
+
+    LayerPrototype.prototype.constructor = LayerPrototype;
+
+    LayerPrototype.prototype.get = function(name) {
+        return this[name];
+    };
+
+    LayerPrototype.prototype.createLayers = function() {
+        var layers = [];
+        layers.push(
+            new ol.layer.Base({
+                source: new ol.source.TileDebug({
+                projection: &#39;EPSG:3857&#39;
+            })
+        }));
+        layer[0].getSource().setProperties({
+            sourceInstance: undefined // not applicable without custom source (e.g. metar)
+        });
+        this.group.setLayers(new ol.Collection(layers));
+        this.layersCreated.resolve();
+    };
+
+    LayerPrototype.prototype.updateLayer = function () {
+        // do nothing by default (used for prototype/vector mostly)
+    };
+
+    LayerPrototype.prototype.showLayer = function (state) {
+        state = this.persistent === true || typeof state === &#39;undefined&#39; ? true : state;
+        this.group.setVisible(state);
+    };
+
+    LayerPrototype.prototype.cycleLayer = function(step) { //-2, -1, 0, 1, 2, etc.
+        step = step || 1;
+        var layersColl = this.group.getLayers();
+        layersColl.item(this.currentLayer).setOpacity(0);
+
+        this.currentLayer = ((this.currentLayer + step)%10+10)%10; //((current+step)%10+10)%10
+        var size = Object.keys(layersColl).length +1;
+        var indicatorLen = ((this.currentLayer+1) / size) * 100 ; //determine length
+        $(&quot;#counter_text span#x&quot;).html(this.currentLayer+1); //change text of frame loop txt
+        $(&quot;#counter_indicator&quot;).css(&quot;width&quot;,indicatorLen+&quot;%&quot;);
+        layersColl.item(this.currentLayer).setOpacity(this.layerOpacity);
+    };
+
+    LayerPrototype.prototype.loop = function(action) {
+        if(typeof this.loopInterval !== &#39;undefined&#39;) {
+            clearInterval(this.loopInterval);
+        }
+        if(action === true || typeof action === &#39;undefined&#39;) {
+            log.debug(&quot;Looping&quot;);
+            var that = this;
+            this.loopInterval = setInterval(function() {
+                that.cycleLayer();
+            }, 500);
+        }
+    };
+
+
+// allows properties to be preserved (or pickled) if they are set in the child object that calls this parent prototype
+// otherwise it sets that property to the defaults in the parent
+    LayerPrototype.prototype.pickle = function(name, value) {
+        if( typeof this[name] !== &#39;undefined&#39; ) {
+            return this[name];
+        } else {
+            return value;
+        }
+    };
+
+    return LayerPrototype;
+});
+
+
+// below are different child objects/classes that call the Layer prototypes 
+define(function(require) {
+    &#39;use strict&#39;;
+
+    var ol = require(&#39;ol&#39;);
+    var LayerPrototype = require(&#39;map/layer/prototype&#39;);
+
+    var LayerXYZ = function(data) {
+        this.data = this.pickle(&#39;data&#39;, data);
+
+        LayerPrototype.call(this);
+    };
+
+    LayerXYZ.prototype = Object.create(LayerPrototype.prototype);
+    LayerXYZ.prototype.constructor = LayerXYZ;
+
+    return LayerXYZ;
+});
+
+define(function(require) {
+    &#39;use strict&#39;;
+
+    var ol = require(&#39;ol&#39;);
+    var log = require(&#39;logger&#39;);
+    var LayerXYZ = require(&#39;map/layer/prototype/xyz&#39;);
+
+    var LayerBackground = function() {
+        this.persistent = true;
+
+        LayerXYZ.call(this);
+    };
+    LayerBackground.prototype = Object.create(LayerXYZ.prototype);
+    LayerBackground.prototype.constructor = LayerBackground;
+
+    LayerBackground.prototype.createLayers = function() {
+        var layers = [
+            new ol.layer.Tile({
+                source: new ol.source.XYZ({
+                    url: &#39;http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}?appid=45ad401c-fa23-4a10-8b2f-a7ad29a3e2a0&#39;,
+                })
+            })
+        ];
+        this.group.setLayers(new ol.Collection(layers));
+        this.layersCreated.resolve();
+    };
+
+    return LayerBackground;
+});
+
+define(function(require) {
+    &#39;use strict&#39;;
+
+    var ol = require(&#39;ol&#39;);
+    var LayerXYZ = require(&#39;map/layer/prototype/xyz&#39;);
+    var SourceReflective = require(&#39;map/source/tile.prototype/xyz/reflective&#39;);
+
+    var ReflectiveLayer = function(data) {
+        this.loopControls = true;
+        this.data = data;
+        this.layerOpacity = .5;
+
+        LayerXYZ.call(this);
+    };
+
+    ReflectiveLayer.prototype = Object.create(LayerXYZ.prototype);
+    ReflectiveLayer.prototype.constructor = ReflectiveLayer;
+
+    ReflectiveLayer.prototype.createLayers = function() {
+        var layers = [];
+
+        for(var x=0; x&lt;10; x++) {
+            var sourceReflective = new SourceReflective(x);
+            sourceReflective.source.setProperties({
+                instance: sourceReflective
+            });
+            layers.push(
+                new ol.layer.Tile({
+                    source: sourceReflective.source,
+                    opacity: 0
+            }));
+        };
+        layers.reverse();
+        layers[0].setOpacity(this.layerOpacity);
+        $(&quot;#counter_text span#y&quot;).html(layers.length); //update the frame loop txt
+        this.group.setLayers(new ol.Collection(layers));
+        this.layersCreated.resolve();
+    };
+
+    return ReflectiveLayer;
+});
+</code></pre></div>
+<h4>Sources</h4>
+<div class="highlight"><pre><code class="language-text" data-lang="text">// This is a custom child of OpenLayers Sources, allowing use to add more properties and behaviors to our XYZ sources.
+
+define(function (require) {
+    &#39;use strict&#39;;
+
+    var ol = require(&#39;ol&#39;);
+    var SourcePrototype = require(&#39;map/source/tile.prototype&#39;);
+
+    function SourceXYZ (iterator) {
+        this.iterator = this.pickle(&#39;iterator&#39;, iterator);
+        this.url = this.pickle(&#39;url&#39;, &#39;http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}?appid=45ad401c-fa23-4a10-8b2f-a7ad29a3e2a0&#39;);
+
+        SourcePrototype.call(this);
+    }
+
+    SourceXYZ.prototype = Object.create(SourcePrototype.prototype);
+    SourceXYZ.prototype.constructor = SourceXYZ;
+
+    SourceXYZ.prototype.createSource = function() {
+        return new ol.source.XYZ({
+            url: this.url,
+            projection: this.projection
+        });
+    };
+
+    return SourceXYZ;
+});
+
+// This is a specific child of the XYZ source prototype, to be used by our reflective radar layer
+
+define(function(require) {
+    &#39;use strict&#39;;
+
+    var ol = require(&#39;ol&#39;);
+    var SourceXYZPrototype = require(&#39;map/source/tile.prototype/xyz&#39;);
+
+    var SourceReflective = function(iterator) {
+        this.projection = &#39;EPSG:900913&#39;;
+        this.iterator = iterator;
+        this.url = &#39;http://ridgewms.srh.noaa.gov/tc/tc.py/1.0.0/N0Q_&#39;+this.iterator+&#39;/{z}/{x}/{y}&#39;;
+
+        SourceXYZPrototype.call(this);
+    };
+    SourceReflective.prototype = Object.create(SourceXYZPrototype.prototype);
+    SourceReflective.prototype.constructor = SourceReflective;
+
+    return SourceReflective;
+})
+
+/* Specific Map instance */
+var thumbnailMap = new Map({
+    target: &#39;baseReflective&#39;,
+    controls: {attribution: false, zoom: false},
+    playback: false
+});
+
+$(window).on(&#39;sector:set&#39;, function(evt){
+    createRadarShortcut(evt);
+});
+
+function createRadarShortcut(evt) {
+    $(&quot;#baseReflective&quot;).empty();
+
+    var sectorData = session.getSectorData();
+
+    thumbnailMap.setTarget();
+    thumbnailMap.isReady().done(function() {
+        thumbnailMap.setExtent(sectorData).done(function() {
+            log.info(&quot;Updating map sector layer for new sector&quot;);
+            thumbnailMap.updateMap(evt, {layer: &quot;radar&quot;});
+        });
+    });
+}
+</code></pre></div>
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2016/06/13/Deck-Of-Cards/">
+            Simple Deck of Cards
+            <small>13 Jun 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/06/08/Form-Validation-Concept/">
+            Bouncy Ball Form Validation
+            <small>08 Jun 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/05/25/Magazine-AJAX-Filter/">
+            Filtering Magazines Issues with AJAX
+            <small>25 May 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+    </div>
+
+  </body>
+</html>
