@@ -63,21 +63,22 @@
       <div class="post">
   <h1 class="post-title">AceInfo Code Dump</h1>
   <span class="post-date">03 Jun 2016</span>
-  <p>I took a job with AceInfo, a government contractor who develops with the NOAA. This is the most interesting work I&#39;ve done to date,
+  <p>I took a job with AceInfo, a government contractor who develops with the NOAA. This is the most interesting work I’ve done to date,
 probably because I got in a little above my skill level. It was a lot of fun though. Below is a bunch of code I did on a project using
 OpenLayers 3 and ESRI Maps. Enjoy!</p>
 
-<h2>Scroll down for lots of radar code</h2>
+<h2 id="scroll-down-for-lots-of-radar-code">Scroll down for lots of radar code</h2>
 
-<p><strong><em>I&#39;ve excluded content I didn&#39;t create or work on, so the context might seem a bit skewed.</em></strong></p>
+<p><strong><em>I’ve excluded content I didn’t create or work on, so the context might seem a bit skewed.</em></strong></p>
 
-<p><a href="http://www.codepen.io/mcphelpsius">Here&#39;s a bare bones version for the first, simple solution that we had to incorporate in to a more complex project.</a>
+<p><a href="http://www.codepen.io/mcphelpsius">Here’s a bare bones version for the first, simple solution that we had to incorporate in to a more complex project.</a>
 We had to fix the looping radar layer on the project, because it was flashing on every iteration. A call was being made 
 for the data on every iteration, so instead we loaded all the layers at once. From there, we incorporated it into a very
 complex, flexible project, which required a whole ne architecture, as seen below.</p>
 
-<h4>Map Object</h4>
-<div class="highlight"><pre><code class="language-" data-lang="">/* This is the overarching Map object that contains OpenLayers Extents, an OpenLayers Map, 
+<h4 id="map-object">Map Object</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/* This is the overarching Map object that contains OpenLayers Extents, an OpenLayers Map, 
 OpenLayers layers/layerGroups,and our custom layerHandler. This allows them all to be accessible to ecah other with multiple maps
 in the app that should cross over each other. */
 
@@ -175,9 +176,11 @@ Map.prototype.attachEvents = function () {
 
     });
 };
-</code></pre></div>
-<h4>Layer Handler</h4>
-<div class="highlight"><pre><code class="language-" data-lang="">/* In this page we created the Map's Handler to handle the layers on the map that would be switched active and hidden. 
+</code></pre></div></div>
+
+<h4 id="layer-handler">Layer Handler</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/* In this page we created the Map's Handler to handle the layers on the map that would be switched active and hidden. 
 Here we would create all the layers for the map, and create a reference to them. This would allow us to toggle which layers would be 
 showing on the map, based on layer data. We made it able to show multiple layers.
 
@@ -286,9 +289,11 @@ Handler.prototype.updateLayer = function (refName, data) {
         log.warn("Cannot update layer " + refName);
     }
 };
-</code></pre></div>
-<h4>Layers</h4>
-<div class="highlight"><pre><code class="language-" data-lang="">define(function (require) {
+</code></pre></div></div>
+
+<h4 id="layers">Layers</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>define(function (require) {
     'use strict';
 
     var $ = require('jquery');
@@ -472,9 +477,11 @@ define(function(require) {
 
     return ReflectiveLayer;
 });
-</code></pre></div>
-<h4>Sources</h4>
-<div class="highlight"><pre><code class="language-" data-lang="">// This is a custom child of OpenLayers Sources, allowing use to add more properties and behaviors to our XYZ sources.
+</code></pre></div></div>
+
+<h4 id="sources">Sources</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// This is a custom child of OpenLayers Sources, allowing use to add more properties and behaviors to our XYZ sources.
 
 define(function (require) {
     'use strict';
@@ -547,7 +554,8 @@ function createRadarShortcut(evt) {
         });
     });
 }
-</code></pre></div>
+</code></pre></div></div>
+
 </div>
 
 <div class="related">
