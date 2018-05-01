@@ -1,0 +1,10 @@
+{
+  "typescript.check.tscVersion": false,
+  "phpformatter.composer": true,
+  "editor.tabSize": 2,
+  "emmet.triggerExpansionOnTab": true,
+  "editor.formatOnSave": false,
+  "prettier.eslintIntegration": true,
+  "prettier.singleQuote": true,
+  "prettier.trailingComma": "all",
+}
