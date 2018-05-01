@@ -46,6 +46,7 @@
     <nav class="sidebar-nav">
       <a class="sidebar-nav-item" href="/WundergroundApp">Predict the Weather</a>
       <a class="sidebar-nav-item" href="/KitschyCache">The Way to a Woman's Heart</a>
+      <a class="sidebar-nav-item" href="/FreeCodeCamp-Quote-Generator/dist">Get Inspired Randomly</a>
       <div class="flex social-imagelinks">
         <a href="http://codepen.io/McPhelpsius/"><img src="/images/thecodepenideserve.png" alt="Codepen"></a>
         <a href="http://github.com/McPhelpsius/"><img src="/images/githubwhite.png" alt="Github"></a>
@@ -53,7 +54,7 @@
 
     </nav>
 
-    <p>&copy; 2016. All rights reserved.</p>
+    <p>&copy; 2018. All rights reserved.</p>
   </div>
 </div>
 
@@ -89,19 +90,19 @@ It allowed us to turn a Drupal &quot;View&quot; into an API.</p>
 <p>We used this to make a call to that service and return HTML data to populate the next two drop downs, the third (the issue)
 depending on the selection in the second dropdown. After all three (and <em>only</em> after all three) are selected, 
 then pressing &#39;Go&#39; will navigate directly to the magazine article you chose. </p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">  function getDropDownData (value){
-    $(&#39;option.delete-me&#39;).remove();
-    selectYear.prop(&#39;disabled&#39;, &#39;disabled&#39;);
-    selectIssue.prop(&#39;disabled&#39;, &#39;disabled&#39;);
+<div class="highlight"><pre><code class="language-" data-lang="">  function getDropDownData (value){
+    $('option.delete-me').remove();
+    selectYear.prop('disabled', 'disabled');
+    selectIssue.prop('disabled', 'disabled');
     ajaxResult = $.ajax(
-        &#39;/api/views/magazine_collection?tid_raw=&#39; + value,
+        '/api/views/magazine_collection?tid_raw=' + value,
         {
-          dataType: &quot;json&quot;,
+          dataType: "json",
           dataFilter: function(data, type){
             parsed_data = $.parseJSON(data);
             $.each(parsed_data, function(i, item){
               date = item.issue_date;
-              temp_data = date.slice(0, date.indexOf(&#39; &#39;)).split(&#39;-&#39;);
+              temp_data = date.slice(0, date.indexOf(' ')).split('-');
               item.date_data = {
                 year: temp_data[0],
                 month: temp_data[1],
@@ -110,19 +111,19 @@ then pressing &#39;Go&#39; will navigate directly to the magazine article you ch
             });
             return JSON.stringify(parsed_data);
           },
-          type: &quot;GET&quot;
+          type: "GET"
         });
 
     ajaxResult.done(function(data){
       years = [];
 
       $.each(data, function(i, item){
-        if(years.indexOf(item.date_data[&#39;year&#39;]) === -1){
-          years.push(item.date_data[&#39;year&#39;]);
+        if(years.indexOf(item.date_data['year']) === -1){
+          years.push(item.date_data['year']);
         }
       });
       years.sort().reverse();
-      selectYear.removeProp(&#39;disabled&#39;);
+      selectYear.removeProp('disabled');
 
       $.each(years, function(y, year){
           selectYear.append(
@@ -136,20 +137,20 @@ then pressing &#39;Go&#39; will navigate directly to the magazine article you ch
     });
 
     ajaxResult.fail(function(){
-      console.log(&#39;You embarrass me!&#39;);
+      console.log('You embarrass me!');
     });
   }
 
   function findIssuesByYear(value, data){
     issues = [];
     $.each(data, function(i, item){
-      if(item.date_data[&#39;year&#39;] == value){
+      if(item.date_data['year'] == value){
         issues[item.date_data.month - 0] = item;
       }
     });
 
-    selectIssue.removeProp(&#39;disabled&#39;);
-    selectIssue.find(&#39;.delete-me&#39;).remove();
+    selectIssue.removeProp('disabled');
+    selectIssue.find('.delete-me').remove();
 
     $.each(issues, function(i, issue){
       if(issue){
@@ -161,7 +162,7 @@ then pressing &#39;Go&#39; will navigate directly to the magazine article you ch
   }
 
   function setNavigation(){
-    $(&#39;#go-to-issue&#39;).attr(&#39;action&#39;, selectIssue.val());
+    $('#go-to-issue').attr('action', selectIssue.val());
   }
 </code></pre></div>
 </div>
