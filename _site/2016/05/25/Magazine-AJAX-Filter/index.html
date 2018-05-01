@@ -68,29 +68,30 @@ There was a good patch of maybe 2-3 months where it felt like I was doing the sa
 So I appreciated the chance to take on the following task:</p>
 
 <blockquote>
-<h2>THREAT: Magazine Issue Filtering!</h2>
-
-<p>The fashion-forward fanatics can&#39;t find fastly. (The salon magazine 
+  <h2 id="threat-magazine-issue-filtering">THREAT: Magazine Issue Filtering!</h2>
+  <p>The fashion-forward fanatics can’t find fastly. (The salon magazine 
 clients wanted to be able to get to their magazine issues more quickly)</p>
+</blockquote>
 
-<h2>TASK: Simplify the process</h2>
-
-<ul>
-<li>Create a filtering interface to fetch magazines from one location at the top of the archive.</li>
-<li>The interface should be a series of 3 drop-down selects, each filtering further down to a final, single magazine selection.</li>
-<li>After the final selection is made, a &quot;Go&quot; button would navigate directly to that issue&#39;s page.</li>
-</ul>
+<blockquote>
+  <h2 id="task-simplify-the-process">TASK: Simplify the process</h2>
+  <ul>
+    <li>Create a filtering interface to fetch magazines from one location at the top of the archive.</li>
+    <li>The interface should be a series of 3 drop-down selects, each filtering further down to a final, single magazine selection.</li>
+    <li>After the final selection is made, a “Go” button would navigate directly to that issue’s page.</li>
+  </ul>
 </blockquote>
 
 <p>To get the data properly, we set up the first drop down to dynamically represent all of the 
 magazines in the archive that would have even one issue available. The options in this drop down were assigned values equal to 
-that magazine&#39;s id in the service we set up using <a href="https://www.drupal.org/project/services_views">Services Views</a> for Drupal.
-It allowed us to turn a Drupal &quot;View&quot; into an API.</p>
+that magazine’s id in the service we set up using <a href="https://www.drupal.org/project/services_views">Services Views</a> for Drupal.
+It allowed us to turn a Drupal “View” into an API.</p>
 
 <p>We used this to make a call to that service and return HTML data to populate the next two drop downs, the third (the issue)
 depending on the selection in the second dropdown. After all three (and <em>only</em> after all three) are selected, 
-then pressing &#39;Go&#39; will navigate directly to the magazine article you chose. </p>
-<div class="highlight"><pre><code class="language-" data-lang="">  function getDropDownData (value){
+then pressing ‘Go’ will navigate directly to the magazine article you chose.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  function getDropDownData (value){
     $('option.delete-me').remove();
     selectYear.prop('disabled', 'disabled');
     selectIssue.prop('disabled', 'disabled');
@@ -164,7 +165,8 @@ then pressing &#39;Go&#39; will navigate directly to the magazine article you ch
   function setNavigation(){
     $('#go-to-issue').attr('action', selectIssue.val());
   }
-</code></pre></div>
+</code></pre></div></div>
+
 </div>
 
 <div class="related">
